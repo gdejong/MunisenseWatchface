@@ -2,12 +2,12 @@
     "author": "Gijs de Jong",
     "dependencies": {},
     "keywords": [],
-    "name": "test-1",
+    "name": "munisense",
     "pebble": {
         "capabilities": [
             ""
         ],
-        "displayName": "Test 1",
+        "displayName": "Munisense styled watchface",
         "enableMultiJS": true,
         "messageKeys": [],
         "projectType": "native",
