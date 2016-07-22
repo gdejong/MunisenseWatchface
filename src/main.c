@@ -4,7 +4,7 @@ static TextLayer *s_time_layer;
 static TextLayer *s_date_layer;
 static TextLayer *s_battery_layer;
 static GFont s_time_font;
-static GFont s_battery_font;
+static GFont s_small_font;
 static BitmapLayer *s_background_layer;
 static GBitmap *s_background_bitmap;
 
@@ -46,65 +46,57 @@ static void main_window_load(Window *window) {
   // Get information about the Window
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
-
-  // Create the TextLayer with specific bounds
+  
+  // Load the fonts.
+  s_small_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_MUNISENSE_SMALL_18));
+  s_time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_MUNISENSE_GOTHIC_56));
+  
+  // Create the time layer.
   s_time_layer = text_layer_create( GRect(0, PBL_IF_ROUND_ELSE(58, 52), bounds.size.w, 75));
-
-  // Improve the layout to be more like a watchface
   text_layer_set_background_color(s_time_layer, GColorClear);
   text_layer_set_text_color(s_time_layer, GColorVividCerulean);
-  // Create GFont
-  s_time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_MUNISENSE_GOTHIC_56));
-  // Apply to TextLayer
   text_layer_set_font(s_time_layer, s_time_font);
   text_layer_set_text_alignment(s_time_layer, GTextAlignmentCenter);
   
-  // Create GBitmap
+  // Create the Munisense logo layer.
   s_background_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_MUNISENSE_LOGO);
-  // Create BitmapLayer to display the GBitmap
   s_background_layer = bitmap_layer_create(bounds);
-  // Set the bitmap onto the layer and add to the window
   bitmap_layer_set_bitmap(s_background_layer, s_background_bitmap);
   layer_add_child(window_layer, bitmap_layer_get_layer(s_background_layer));
   
-  // Battery stuff
-  s_battery_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_MUNISENSE_SMALL_18));
+  // Create the baterry layer.
   s_battery_layer = text_layer_create(GRect(0, 0, bounds.size.w, 34));
   text_layer_set_text_color(s_battery_layer, GColorVividCerulean);
   text_layer_set_background_color(s_battery_layer, GColorClear);
-  text_layer_set_font(s_battery_layer, s_battery_font);
+  text_layer_set_font(s_battery_layer, s_small_font);
   text_layer_set_text_alignment(s_battery_layer, GTextAlignmentCenter);
   text_layer_set_text(s_battery_layer, "100% charged");
   battery_state_service_subscribe(handle_battery);
   
-  // Create date TextLayer
+  // Create the date layer
   s_date_layer = text_layer_create(GRect(0, 40, 144, 30));
   text_layer_set_text_color(s_date_layer, GColorVividCerulean);
   text_layer_set_background_color(s_date_layer, GColorClear);
   text_layer_set_text_alignment(s_date_layer, GTextAlignmentCenter);
-  text_layer_set_font(s_date_layer, s_battery_font);
+  text_layer_set_font(s_date_layer, s_small_font);
   
-  // Add to Window
-  layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_date_layer));
-  
-  // Add battery text
+  // Add the layers to the window.
+  layer_add_child(window_layer, text_layer_get_layer(s_date_layer));
   layer_add_child(window_layer, text_layer_get_layer(s_battery_layer));
-
-  // Add it as a child layer to the Window's root layer
   layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
 }
 
 static void main_window_unload(Window *window) {
-  // Destroy TextLayer
+  // Destroy the layers.
   text_layer_destroy(s_time_layer);
   text_layer_destroy(s_battery_layer);
   text_layer_destroy(s_date_layer);
-  // Unload GFont
+  // Unload the fonts.
   fonts_unload_custom_font(s_time_font);
-  fonts_unload_custom_font(s_battery_font);
-  // Destroy GBitmap
+  fonts_unload_custom_font(s_small_font);
+  // Destroy the bitmaps.
   gbitmap_destroy(s_background_bitmap);
-  // Destroy BitmapLayer
+  // Destroy the bitmap layers.
   bitmap_layer_destroy(s_background_layer);
 }
 
@@ -114,7 +106,7 @@ static void init() {
   // Register with TickTimerService
   tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
   // Set background color.
-  window_set_background_color(s_main_window, GColorBlack);
+  window_set_background_color(s_main_window, GColorYellow);
 
   // Set handlers to manage the elements inside the Window
   window_set_window_handlers(s_main_window, (WindowHandlers) {
