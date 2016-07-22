@@ -81,9 +81,9 @@ static void main_window_load(Window *window) {
   text_layer_set_font(s_date_layer, s_small_font);
   
   // Add the layers to the window.
-  layer_add_child(window_layer, text_layer_get_layer(s_date_layer));
-  layer_add_child(window_layer, text_layer_get_layer(s_battery_layer));
-  layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
+  layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_date_layer));
+  layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_battery_layer));
+  layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_time_layer));
 }
 
 static void main_window_unload(Window *window) {
