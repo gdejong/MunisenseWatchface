@@ -1,0 +1,48 @@
+{
+    "author": "Gijs de Jong",
+    "dependencies": {},
+    "keywords": [],
+    "name": "test-1",
+    "pebble": {
+        "capabilities": [
+            ""
+        ],
+        "displayName": "Test 1",
+        "enableMultiJS": true,
+        "messageKeys": [],
+        "projectType": "native",
+        "resources": {
+            "media": [
+                {
+                    "file": "fonts/gothic_small",
+                    "name": "FONT_MUNISENSE_SMALL_18",
+                    "targetPlatforms": null,
+                    "type": "font"
+                },
+                {
+                    "file": "images/munisense",
+                    "name": "IMAGE_MUNISENSE_LOGO",
+                    "targetPlatforms": null,
+                    "type": "bitmap"
+                },
+                {
+                    "file": "fonts/gothic.TTF",
+                    "name": "FONT_MUNISENSE_GOTHIC_56",
+                    "targetPlatforms": null,
+                    "type": "font"
+                }
+            ]
+        },
+        "sdkVersion": "3",
+        "targetPlatforms": [
+            "aplite",
+            "basalt",
+            "chalk"
+        ],
+        "uuid": "55f0760d-a914-4a0e-9315-ee0f2799902a",
+        "watchapp": {
+            "watchface": true
+        }
+    },
+    "version": "1.0.0"
+}
