@@ -4,40 +4,23 @@
     "keywords": [],
     "name": "munisense",
     "pebble": {
-        "capabilities": [
-            ""
-        ],
-        "displayName": "Munisense styled watchface",
+        "displayName": "Munisense watchface",
         "enableMultiJS": true,
         "messageKeys": [],
         "projectType": "native",
         "resources": {
             "media": [
                 {
-                    "file": "fonts/gothic_small",
-                    "name": "FONT_MUNISENSE_SMALL_18",
-                    "targetPlatforms": null,
-                    "type": "font"
-                },
-                {
                     "file": "images/munisense",
                     "name": "IMAGE_MUNISENSE_LOGO",
                     "targetPlatforms": null,
                     "type": "bitmap"
-                },
-                {
-                    "file": "fonts/gothic.TTF",
-                    "name": "FONT_MUNISENSE_GOTHIC_56",
-                    "targetPlatforms": null,
-                    "type": "font"
                 }
             ]
         },
         "sdkVersion": "3",
         "targetPlatforms": [
-            "aplite",
-            "basalt",
-            "chalk"
+            "basalt"
         ],
         "uuid": "55f0760d-a914-4a0e-9315-ee0f2799902a",
         "watchapp": {

@@ -3,6 +3,7 @@ static Window *s_main_window;
 static TextLayer *s_time_layer;
 static TextLayer *s_date_layer;
 static TextLayer *s_battery_layer;
+static TextLayer *s_quiet_time_layer;
 static GFont s_time_font;
 static GFont s_small_font;
 static BitmapLayer *s_background_layer;
@@ -36,6 +37,12 @@ static void update_time() {
   strftime(date_buffer, sizeof(date_buffer), "%a %d %b", tick_time);
   // Show the date
   text_layer_set_text(s_date_layer, date_buffer);
+  
+  if(quiet_time_is_active()) {
+    text_layer_set_text(s_quiet_time_layer, "Quiet Time");
+  } else{
+    text_layer_set_text(s_quiet_time_layer, "");
+  }
 }
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
@@ -48,11 +55,11 @@ static void main_window_load(Window *window) {
   GRect bounds = layer_get_bounds(window_layer);
   
   // Load the fonts.
-  s_small_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_MUNISENSE_SMALL_18));
-  s_time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_MUNISENSE_GOTHIC_56));
+  s_small_font = fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21);
+  s_time_font = fonts_get_system_font(FONT_KEY_ROBOTO_BOLD_SUBSET_49);
   
   // Create the time layer.
-  s_time_layer = text_layer_create( GRect(0, PBL_IF_ROUND_ELSE(58, 52), bounds.size.w, 75));
+  s_time_layer = text_layer_create( GRect(0, PBL_IF_ROUND_ELSE(58, 58), bounds.size.w, 50));
   text_layer_set_background_color(s_time_layer, GColorClear);
   text_layer_set_text_color(s_time_layer, GColorVividCerulean);
   text_layer_set_font(s_time_layer, s_time_font);
@@ -80,10 +87,21 @@ static void main_window_load(Window *window) {
   text_layer_set_text_alignment(s_date_layer, GTextAlignmentCenter);
   text_layer_set_font(s_date_layer, s_small_font);
   
+  // Create the quiet time layer.
+  s_quiet_time_layer = text_layer_create(GRect(0, 110, bounds.size.w, 34));
+  text_layer_set_text_color(s_quiet_time_layer, GColorVividCerulean);
+  text_layer_set_background_color(s_quiet_time_layer, GColorClear);
+  text_layer_set_font(s_quiet_time_layer, s_small_font);
+  text_layer_set_text_alignment(s_quiet_time_layer, GTextAlignmentCenter);
+  
   // Add the layers to the window.
   layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_date_layer));
   layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_battery_layer));
   layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_time_layer));
+  layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_quiet_time_layer));
+  
+    // Make sure the time is displayed from the start
+  update_time();
 }
 
 static void main_window_unload(Window *window) {
@@ -91,9 +109,9 @@ static void main_window_unload(Window *window) {
   text_layer_destroy(s_time_layer);
   text_layer_destroy(s_battery_layer);
   text_layer_destroy(s_date_layer);
-  // Unload the fonts.
-  fonts_unload_custom_font(s_time_font);
-  fonts_unload_custom_font(s_small_font);
+  text_layer_destroy(s_quiet_time_layer);
+  // Unload the fonts. None at this time, system fonts do not need unloading!
+  
   // Destroy the bitmaps.
   gbitmap_destroy(s_background_bitmap);
   // Destroy the bitmap layers.
@@ -116,8 +134,6 @@ static void init() {
 
   // Show the Window on the watch, with animated=true
   window_stack_push(s_main_window, true);
-  // Make sure the time is displayed from the start
-  update_time();
 }
 
 static void deinit() {
